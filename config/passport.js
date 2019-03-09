@@ -14,11 +14,6 @@ module.exports = passport => {
                 proxy: true
             },
             (accessToken, refreshToken, profile, done) => {
-                const image = profile.photos[0].value.substring(
-                    0,
-                    profile.photos[0].value.indexOf('?')
-                );
-
                 User.findOne({
                     googleID: profile.id
                 }).then(user => {
@@ -26,6 +21,11 @@ module.exports = passport => {
                         done(null, user);
                     } else {
                         // Create new user
+                        const image = profile.photos[0].value.substring(
+                            0,
+                            profile.photos[0].value.indexOf('?')
+                        );
+
                         const newUser = new User({
                             googleID: profile.id,
                             firstName: profile.name.givenName,
